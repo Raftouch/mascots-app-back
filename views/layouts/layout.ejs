@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet", href="/styles/styles.css" >
+    <title>Mascots App</title>
+  </head>
+  <body>
+    <div class="bg-slate-100 text-slate-900 min-h-screen">
+      <%- include('../partials/header.ejs') %> 
+      <%- include("../partials/messages.ejs") %>
+      <%- body %>
+      <%- include('../partials/footer.ejs') %>
+    </div>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  </body>
+</html>
