@@ -53,9 +53,9 @@ app.get("/", (req, res) => {
 
 const start = async () => {
   try {
-    // await mongoose.connect(process.env.MONGO_URL);
+    await mongoose.connect(process.env.MONGO_URL);
     app.listen(port, () => console.log(`App is running on port ${port}`));
-    // console.log("Connected to DB");
+    console.log("Connected to DB");
   } catch (error) {
     console.log(error);
     process.exit(1);
