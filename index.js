@@ -7,10 +7,12 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const app = express();
+const cors = require("cors");
 const port = process.env.PORT || 4000;
 
 require("./config/passport")(passport);
 
+app.use(cors({ origin: "http://localhost:5173" }));
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ limit: "10mb", extended: false }));
