@@ -16,7 +16,7 @@ const getAll = async (req, res) => {
     query = query.gte("birthDate", req.query.bornAfter);
   }
   try {
-    const mascots = await query.exec();
+    const mascots = await query.populate("collaborator").exec();
     res.json({
       mascots: mascots,
       searchOptions: req.query,
