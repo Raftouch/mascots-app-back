@@ -68,12 +68,14 @@ const updateOne = async (req, res) => {
   try {
     mascot = await Mascot.findById(req.params.id);
     mascot.name = req.body.name;
-    mascot.collaborator = req.body.collaborator;
     mascot.breed = req.body.breed;
     mascot.gender = req.body.gender;
     mascot.birthDate = new Date(req.body.birthDate);
-    mascot.imageName = fileName;
     mascot.description = req.body.description;
+
+    if (fileName != null) {
+      mascot.imageName = fileName;
+    }
 
     await mascot.save();
     res.json(mascot);
