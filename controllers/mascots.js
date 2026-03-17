@@ -91,11 +91,14 @@ const updateOne = async (req, res) => {
 const deleteOne = async (req, res) => {
   try {
     const mascot = await Mascot.findById(req.params.id);
-    await mascot.deleteOne();
+    if (!mascot) {
+      return res.status(404).json({ error: "Mascot not found" });
+    }
 
+    await mascot.deleteOne();
     res.json({ success: true });
   } catch (error) {
-    res.status(400).json({ error: "Error deleting mascot" });
+    res.status(500).json({ error: "Error deleting mascot" });
   }
 };
 
