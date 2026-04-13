@@ -1,59 +1,54 @@
-const bcrypt = require('bcryptjs')
-const { validationResult } = require('express-validator')
-const User = require('../models/User')
-const passport = require('passport')
+const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
+const User = require("../models/User");
+const passport = require("passport");
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body
-    const errors = validationResult(req)
+    const { name, email, password } = req.body;
+    const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.render('register', {
-        name,
-        email,
-        password,
-        errors: errors.array(),
-      })
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    const candidate = await User.findOne({ email })
+    const candidate = await User.findOne({ email });
     if (candidate) {
-      res.status(400).render('register', {
-        error_msg: 'Such email is already registered',
-      })
+      return res.status(400).json({
+        message: "Such email is already registered",
+      });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12)
-    const user = new User({ name, email, password: hashedPassword })
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User({ name, email, password: hashedPassword });
 
-    await user.save()
+    await user.save();
 
-    res.render('login', {
-      success_msg: 'You are now registered and can log in',
-    })
+    res.status(201).json({
+      message: "User registered successfully",
+    });
   } catch (error) {
-    res.render('register', {
-      error_msg: 'Something went wrong, please try again',
-    })
-    console.log(error)
+    res.status(500).json({
+      message: "Server error",
+    });
+    console.log(error);
   }
-}
+};
 
 const login = (req, res, next) =>
-  passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/login',
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/login",
     failureFlash: true,
-  })(req, res, next)
+  })(req, res, next);
 
 const logout = (req, res, next) => {
   req.logout((error) => {
-    if (error) return next(error)
-  })
-  res.render('login', {
-    success_msg: 'You are logged out',
-  })
-}
+    if (error) return next(error);
+  });
+  res.render("login", {
+    success_msg: "You are logged out",
+  });
+};
 
-module.exports = { register, login, logout }
+module.exports = { register, login, logout };
