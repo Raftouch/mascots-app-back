@@ -35,12 +35,34 @@ const register = async (req, res) => {
   }
 };
 
-const login = (req, res, next) =>
-  passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login",
-    failureFlash: true,
+const login = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    if (!user) {
+      return res.status(401).json({
+        message: info?.message || "Invalid email or password",
+      });
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Login failed" });
+      }
+
+      return res.status(200).json({
+        message: "Login successful",
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    });
   })(req, res, next);
+};
 
 const logout = (req, res, next) => {
   req.logout((error) => {
