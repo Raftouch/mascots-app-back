@@ -65,11 +65,17 @@ const login = (req, res, next) => {
 };
 
 const logout = (req, res, next) => {
-  req.logout((error) => {
-    if (error) return next(error);
-  });
-  res.render("login", {
-    success_msg: "You are logged out",
+  req.logout((err) => {
+    if (err) return next(err);
+
+    req.session.destroy((err) => {
+      if (err) return next(err);
+
+      res.clearCookie("connect.sid");
+      return res.status(200).json({
+        message: "Logged out successfully",
+      });
+    });
   });
 };
 
