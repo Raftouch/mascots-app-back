@@ -1,10 +1,8 @@
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next()
+    return next();
   }
-  res.render('login', {
-    error_msg: 'Please login to access the page',
-  })
+  return res.status(401).json({ message: "Unauthorized" });
 }
 
-module.exports = { ensureAuthenticated }
+module.exports = { ensureAuthenticated };
