@@ -79,4 +79,11 @@ const logout = (req, res, next) => {
   });
 };
 
-module.exports = { register, login, logout };
+const getMe = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  return res.json(req.user);
+};
+
+module.exports = { register, login, logout, getMe };
