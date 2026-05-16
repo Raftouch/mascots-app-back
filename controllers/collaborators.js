@@ -16,7 +16,7 @@ const getAll = async (req, res) => {
       .skip(perPage * page - perPage)
       .limit(perPage)
       .exec();
-    const count = await Collaborator.count();
+    const count = await Collaborator.countDocuments(searchOptions);
 
     res.json({
       collaborators: collaborators,
