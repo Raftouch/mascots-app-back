@@ -27,11 +27,19 @@ app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ limit: "10mb", extended: false }));
 
+app.set("trust proxy", 1);
+
+const isProd = process.env.NODE_ENV === "production";
+
 app.use(
   session({
     secret: process.env.SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    },
   }),
 );
 
