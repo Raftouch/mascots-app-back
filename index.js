@@ -1,7 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-dotenv.config();
 const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -9,6 +7,10 @@ const passport = require("passport");
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 4000;
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 require("./config/passport")(passport);
 
