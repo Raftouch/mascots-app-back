@@ -13,7 +13,15 @@ const port = process.env.PORT || 4000;
 require("./config/passport")(passport);
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+const allowedOrigin = process.env.CLIENT_URL || "http://localhost:5173";
+
+app.use(
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+  }),
+);
 
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
