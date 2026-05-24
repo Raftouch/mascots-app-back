@@ -14,7 +14,7 @@ require("./config/passport")(passport);
 
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-// app.use(cors());
+
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ limit: "10mb", extended: false }));
@@ -48,10 +48,6 @@ app.use("/", require("./routes/dashboard"));
 app.get("/", (req, res) => {
   res.json({ message: "Dashboard" });
 });
-
-// app.get("*", (req, res) => {
-//   res.render("404");
-// });
 
 const start = async () => {
   try {
