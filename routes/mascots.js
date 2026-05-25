@@ -21,8 +21,20 @@ const {
   deleteOne,
 } = require("../controllers/mascots");
 const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads/mascotImages");
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueName + ext);
+  },
+});
+
 const upload = multer({
-  dest: uploadPath,
+  storage,
   fileFilter: (req, file, callback) => {
     callback(null, imageMimeTypes.includes(file.mimetype));
   },
