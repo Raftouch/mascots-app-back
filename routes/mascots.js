@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../config/multer");
 
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated } = require("../middleware/auth");
 
 const {
   getAll,
@@ -13,15 +13,28 @@ const {
   updateOne,
   deleteOne,
 } = require("../controllers/mascots");
+const { isAdmin } = require("../middleware/admin");
 
 router.get("/", ensureAuthenticated, getAll);
 
-router.post("/", ensureAuthenticated, upload.single("image"), createOne);
+router.post(
+  "/",
+  ensureAuthenticated,
+  isAdmin,
+  upload.single("image"),
+  createOne,
+);
 
 router.get("/:id", ensureAuthenticated, getOne);
 
-router.put("/:id", ensureAuthenticated, upload.single("image"), updateOne);
+router.put(
+  "/:id",
+  ensureAuthenticated,
+  isAdmin,
+  upload.single("image"),
+  updateOne,
+);
 
-router.delete("/:id", ensureAuthenticated, deleteOne);
+router.delete("/:id", ensureAuthenticated, isAdmin, deleteOne);
 
 module.exports = router;
