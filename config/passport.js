@@ -23,14 +23,15 @@ module.exports = function (passport) {
   );
 
   passport.serializeUser(function (user, cb) {
-    process.nextTick(function () {
-      cb(null, { id: user.id, username: user.username });
-    });
+    return cb(null, user.id);
   });
 
-  passport.deserializeUser(function (user, cb) {
-    process.nextTick(function () {
+  passport.deserializeUser(async function (id, cb) {
+    try {
+      const user = await User.findById(id);
       return cb(null, user);
-    });
+    } catch (err) {
+      cb(err);
+    }
   });
 };
